@@ -1,0 +1,30 @@
+
+Вывести список мест и регионов, где они находятся
+select territory_description, region_description from territories natural join region;
+Вывести список заказов: заказчик (фирма, имя), служащий (имя, фамилия), дата заказа за 1996 год
+select company_name, contact_name,order_date, last_name, first_name from customers
+natural join orders
+inner join employees on orders.employee_id = employees.employee_id
+limit 10;
+Вывести название товаров, доставленных компанией united package за 1996 г.
+select product_name, company_name from shippers
+inner join orders on orders.ship_via = shippers.shipper_id
+inner join order_details on orders.order_id = order_details.order_id
+inner join products on order_details.product_id = products.product_id;
+
+select product_name, company_name, order_date from shippers
+inner join orders on orders.ship_via = shippers.shipper_id
+inner join order_details on orders.order_id = order_details.order_id
+inner join products on order_details.product_id = products.product_id
+where LOWER(company_name) = 'united package' and order_date<'1997-01-01';
+
+Создать представление (view), в котором содержится категория продукта, название продукта и цена за единицу продукта
+create view cat_prod as
+select category_name, product_name, unit_price
+from products inner join categories on products.category_id=categories.category_id;
+
+показать представление в виде таблице
+select * from sqlite_master where type = 'view';
+
+удалить представление
+drop view if exists cat_prod;
